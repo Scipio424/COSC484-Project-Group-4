@@ -1,10 +1,12 @@
 const GameState = require('./GameState');
 
-// Example usage
-const userID = 'user123'; // Example user ID
+// Example user ID (this should be dynamically set based on the logged-in user)
+const userID = 'testUser'; // Example user ID
+
+// Initialize GameState with user data
 const gameState = new GameState(userID);
 
-// Initialize with a captain
+// Example usage: Initialize with a captain
 const defaultCaptain = {
     startingGold: 50,
     startingFood: 50,

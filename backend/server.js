@@ -11,12 +11,10 @@ const connectDB = require('./db');
 const Card = require('./models/Card');
 const GameState = require(path.join(__dirname, '..', 'frontend', 'GameState'));
 
-
 // App setup
 const app = express();
 const PORT = process.env.PORT || 5000;
 app.use(express.static(path.join(__dirname, '../frontend')));
-
 
 // Connect to MongoDB
 connectDB();
@@ -26,7 +24,8 @@ app.use(cors());
 app.use(express.json());
 
 // Game state instance (in-memory, not tied to DB)
-let gameState = new GameState('user123');
+const userID = 'testUser'; // Example user ID
+let gameState = new GameState(userID);
 
 // --- Routes ---
 
