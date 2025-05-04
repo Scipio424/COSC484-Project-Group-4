@@ -51,7 +51,7 @@ app.get('/game-state', (req, res) => {
 
 app.post('/update-resource', (req, res) => {
   const { resource, value } = req.body;
-  gameState.setResource(resource, value);
+  gameState.setResource(resource, value); // Directly handle provisions
   res.json(gameState);
 });
 
@@ -59,6 +59,30 @@ app.post('/set-market-currency', (req, res) => {
   const { value } = req.body;
   gameState.setMarketCurrency(value);
   res.json(gameState);
+});
+
+// Route to apply card effects
+app.post('/apply-card-effects', async (req, res) => {
+  const { cardID, choice } = req.body;
+  try {
+    const card = await Card.findOne({ id: cardID });
+    if (card) {
+      const result = Math.random() < parseFloat(card.choices[choice].good_result_chance)
+        ? card.choices[choice].good_result
+        : card.choices[choice].bad_result;
+      gameState.applyStatBoost({
+        gold: result.gold_effect,
+        provisions: result.provisions_effect,
+        morale: result.morale_effect,
+        crewSize: result.crew_effect,
+      });
+      res.json({ message: 'Card effects applied', resources: gameState.resources });
+    } else {
+      res.status(404).json({ message: 'Card not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error applying card effects' });
+  }
 });
 
 // Start the server

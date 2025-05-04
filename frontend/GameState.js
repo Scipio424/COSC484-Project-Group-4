@@ -7,7 +7,7 @@ class GameState {
         this.userID = userID;
         this.resources = {
             gold: 100,
-            food: 100,
+            provisions: 100, // Renamed from food
             morale: 100,
             crewSize: 100
         };
@@ -23,7 +23,7 @@ class GameState {
         const user = users.find(u => u.userName === this.userID);
         if (user) {
             this.resources.gold = user.currentRun.gold;
-            this.resources.food = user.currentRun.food;
+            this.resources.provisions = user.currentRun.provisions; // Renamed from food
             this.resources.morale = user.currentRun.moral;
             this.resources.crewSize = user.currentRun.crew;
             this.marketCurrency = user.marketCurrency || 0;
@@ -36,7 +36,7 @@ class GameState {
         const userIndex = users.findIndex(u => u.userName === this.userID);
         if (userIndex !== -1) {
             users[userIndex].currentRun.gold = this.resources.gold;
-            users[userIndex].currentRun.food = this.resources.food;
+            users[userIndex].currentRun.provisions = this.resources.provisions; // Renamed from food
             users[userIndex].currentRun.moral = this.resources.morale;
             users[userIndex].currentRun.crew = this.resources.crewSize;
             users[userIndex].marketCurrency = this.marketCurrency;
@@ -48,7 +48,7 @@ class GameState {
     setCaptain(captain) {
         this.captain = captain;
         this.resources.gold = captain.startingGold;
-        this.resources.food = captain.startingFood;
+        this.resources.provisions = captain.startingProvisions; // Renamed from food
         this.resources.morale = captain.startingMorale;
         this.resources.crewSize = captain.startingCrewSize;
         this.saveUserData(); // Save updated data
@@ -84,6 +84,19 @@ class GameState {
         }
         this.checkIfLost();
         this.saveUserData(); // Save updated data
+    }
+
+    // Method to apply card effects
+    applyCardEffects(cardID, choice) {
+        const card = cards.find(c => c.CardID === cardID); // Assuming cards are loaded in memory
+        if (card) {
+            const result = Math.random() < card.Choices[choice].GoodResultChance / 100
+                ? card.Choices[choice].ResourcesAffectedGoodResult
+                : card.Choices[choice].ResourcesAffectedBadResult;
+            result.forEach(effect => {
+                this.setResource(effect.ResourceName.toLowerCase(), this.getResource(effect.ResourceName.toLowerCase()) + effect.ResourceShift);
+            });
+        }
     }
 
     // Method to check if the game is lost

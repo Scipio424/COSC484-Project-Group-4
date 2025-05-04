@@ -46,7 +46,7 @@ function applyCardEffects(cardID, choice) {
         const result = Math.random() < parseFloat(card.choices[choice].good_result_chance) ? card.choices[choice].good_result : card.choices[choice].bad_result;
         gameState.applyStatBoost({
             gold: result.gold_effect,
-            food: result.provisions_effect,
+            provisions: result.provisions_effect,
             morale: result.morale_effect,
             crewSize: result.crew_effect
         });

@@ -4,7 +4,7 @@ const GameState = require('./GameState');
 // Item JSON objects.
 let itemJSON = [
     {itemID: "001", price: "5", name: "Test Item #1", description: "An item for testing.", resourceAffected: "gold", resourceShift: 1},
-    {itemID: "002", price: "10", name: "Test Item #2", description: "An item for testing.", resourceAffected: "food", resourceShift: 2}
+    {itemID: "002", price: "10", name: "Test Item #2", description: "An item for testing.", resourceAffected: "provisions", resourceShift: 2} // Renamed from food
 ];
 
 // Captain JSON objects.
@@ -30,3 +30,4 @@ function applyItemEffects(itemID) {
 // Example usage
 applyItemEffects("001");
 console.log('Updated Resources:', gameState.resources);
+
